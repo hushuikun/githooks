@@ -1,0 +1,29 @@
+#!/bin/sh
+
+echo "🔎 正在进行提交信息格式检查..."
+# 读取提交信息
+commit_msg_file="$1"
+commit_msg=$(cat "$commit_msg_file")
+echo "🔎 提交信息: $commit_msg"
+
+# 定义符合 Conventional Commits 规范的正则表达式
+commit_regex="^(feat|fix|docs|style|refactor|perf|test|chore|ci|build|revert)(\(.+\))?: .{1,50}$"
+
+# 检查提交信息是否符合规范
+if ! echo "$commit_msg" | grep -qE "$commit_regex"; then
+    echo "❌ 提交信息不符合规范! 请参考https://www.conventionalcommits.org/en/v1.0.0/#summary"
+    echo ""
+    echo "✅ 正确示例: "
+    echo "  feat(auth): add login with OAuth2"
+    echo "  fix(cart): correct total price calculation"
+    echo "  docs(readme): update installation guide"
+    echo ""
+    echo "🚀 规则要求: "
+    echo "  - 开头必须是 type, 例如 feat, fix, docs, style..."
+    echo "  - 可选的 scope 用 () 包裹，例如 (auth)"
+    echo "  - 使用冒号 : 分隔 type 和 message"
+    echo "  - 提交信息应简洁 (50 字符以内) "
+    exit 1
+fi
+
+echo "✅ 完成提交信息格式检查！"

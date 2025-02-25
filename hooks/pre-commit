@@ -1,0 +1,19 @@
+#!/bin/sh
+
+# 运行一个进程（示例: 启动 sleep 60 作为测试）
+your_command="sh startup.sh"  # 这里换成你的实际命令
+$your_command &
+pid=$!  # 获取进程 ID
+
+echo "🔎 正在进行服务运行状态检查..."
+echo "🔎 启动startup.sh成功, 进程ID $pid , 等待 20 秒检查状态..."
+sleep 20  # 等待 20 秒
+
+# 检查进程是否仍然存在
+if ps -p $pid > /dev/null; then
+    echo "✅ 完成服务运行状态检查。终止进程 $pid..."
+    kill $pid
+else
+    echo "❌ 进程 $pid 不存在, 运行状态检查失败, 请检查! "
+    exit 1
+fi
