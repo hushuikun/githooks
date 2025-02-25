@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # 运行一个进程（示例: 启动 sleep 60 作为测试）
-your_command="sh startup.sh"  # 这里换成你的实际命令
+your_command=""  # 这里换成你的实际命令
 # 检查是否存在app.py或者main.py
 # 如果存在app.py, 则使用flask run --port=8080启动
 # 如果存在main.py, 则使用python main.py启动
@@ -9,6 +9,12 @@ if [ -f "app.py" ]; then
     your_command="flask run --port=8080"
 elif [ -f "main.py" ]; then
     your_command="uvicorn main:app --port=8080"
+fi
+
+# your_command 为空, 则提示并安全退出
+if [ -z "$your_command" ]; then
+    echo "✅ 非Flask或FastAPI项目, 跳过服务运行状态检查"
+    exit 0
 fi
 
 $your_command &
